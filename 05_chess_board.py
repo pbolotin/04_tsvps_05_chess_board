@@ -105,13 +105,59 @@ def make_max_sum_in_the_each_cell(matrix):
         if diagonal < matrix_size + 1:
             for i in range(1, diagonal + 1):
                 j = diagonal - i + 1
-                print(f"({i} {j} {matrix[i][j]}) ", end="")
-            print()
+                #print(f"({i} {j} {matrix[i][j]}) ", end="")
+                sum_from_up = 0
+                sum_from_left = 0
+                if i != 1:
+                    sum_from_up = matrix[i-1][j]
+                if j != 1:
+                    sum_from_left = matrix[i][j-1]
+            
+                matrix[i][j] += max(sum_from_up, sum_from_left)
+            #print()
         else:
             for i in range(diagonal - matrix_size + 1, matrix_size + 1):
                 j = diagonal - i + 1
-                print(f"({i} {j} {matrix[i][j]}) ", end="")
-            print()
+                #print(f"({i} {j} {matrix[i][j]}) ", end="")
+                sum_from_up = 0
+                sum_from_left = 0
+                if i != 1:
+                    sum_from_up = matrix[i-1][j]
+                if j != 1:
+                    sum_from_left = matrix[i][j-1]
+                    
+                matrix[i][j] += max(sum_from_up, sum_from_left)
+            #print()
+    
+def find_right_way_to_max_sum(matrix):
+    matrix_size = matrix[0][0]
+    
+    right_way = []
+    i = matrix_size
+    j = matrix_size
+    while True:
+        up_value = 0
+        left_value = 0
+        break_check = True
+        if i > 1:
+            up_value = matrix[i-1][j]
+            break_check = False
+        if j > 1:
+            left_value = matrix[i][j-1]
+            break_check = False
+
+        #Condition to stop cycle and return result
+        if break_check:
+            return list(reversed(right_way))
+        
+        if up_value > left_value:
+            right_way.append("D")
+            i -= 1
+        else:
+            right_way.append("R")
+            j -= 1
+            
+        
     
 if __name__ == "__main__":
     if(check_number_of_arguments() == False):
@@ -120,4 +166,7 @@ if __name__ == "__main__":
     data = load_matrix_from_file()
     output_matrix_to_stdout(data)
     make_max_sum_in_the_each_cell(data)
+    output_matrix_to_stdout(data)
+    right_way = find_right_way_to_max_sum(data)
+    print(right_way)
     
